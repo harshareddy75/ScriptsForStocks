@@ -96,16 +96,10 @@ for my $ticker (keys %tickers) {
     my $increase = $closePrices[0] - $closePrices[3];
     my $percentIncrease = ($increase*100)/$closePrices[3];
     my $size = @listIncrease;
-    print "Increase in $ticker of $increase\n";
-    if ($size < 5) {
-      push @listIncrease, $percentIncrease;
-      $increaseTickers{$percentIncrease} = $ticker;
-      @listIncrease = sort { $a <=> $b} @listIncrease;
-    } else {
-      shift @listIncrease;
-      push @listIncrease, $percentIncrease;
-      $increaseTickers{$percentIncrease} = $ticker;
-    }
+    #print "Increase in $ticker of $increase\n";
+    push @listIncrease, $percentIncrease;
+    $increaseTickers{$percentIncrease} = $ticker;
+    #@listIncrease = sort { $a <=> $b} @listIncrease;
   }
   if (($closePrices[0]-$closePrices[1] < 0) &&
   ($closePrices[1]-$closePrices[2] < 0) &&
@@ -113,27 +107,22 @@ for my $ticker (keys %tickers) {
     my $decrease = $closePrices[3] - $closePrices[0];
     my $percentDecrease = ($decrease*100)/$closePrices[3];
     my $size = @listDecrease;
-    print "Decrease in $ticker of $decrease\n";
-    if ($size < 5) {
-      push @listDecrease, $percentDecrease;
-      $decreaseTickers{$percentDecrease} = $ticker;
-      @listDecrease = sort { $a <=> $b} @listDecrease;
-    } else {
-      shift @listDecrease;
-      push @listDecrease, $percentDecrease;
-      $decreaseTickers{$percentDecrease} = $ticker;
-    }
+    #print "Decrease in $ticker of $decrease\n";
+    push @listDecrease, $percentDecrease;
+    $decreaseTickers{$percentDecrease} = $ticker;
+    #@listDecrease = sort { $a <=> $b} @listDecrease;
   }
 }
 
 print "Printing the increasing ones\n";
-
-foreach my $increase (@listIncrease) {
-  print "$increaseTickers{$increase} - $increase\n";
+@listDecrease = sort { $b <=> $a} @listDecrease;
+@listIncrease = sort { $b <=> $a} @listIncrease;
+for (my $i = 0; $i < 5; $i++) {
+  print "$increaseTickers{$listIncrease[$i]} - $listIncrease[$i]\n";
 }
 
 print "Printing the decreasing ones\n";
 
-foreach my $decrease (@listDecrease) {
-  print "$decreaseTickers{$decrease} - $decrease\n";
+for (my $i = 0; $i < 5; $i++) {
+  print "$decreaseTickers{$listDecrease[$i]} - $listDecrease[$i]\n";
 }
