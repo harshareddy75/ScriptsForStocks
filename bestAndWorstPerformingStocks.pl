@@ -58,13 +58,15 @@ for (my $i = 0; $i < 10; $i++) {
 }
 
 my $timeSeriesCall = "http://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=";
+# Change the apikey here
 my $apiKey = "&apikey=xxxx";
+my $tickerCount = 0;
 for my $ticker (keys %tickers) {
   my $numberOfAttempts = 0;
   my $call = $timeSeriesCall . $ticker . $apiKey;
   my $timeSeriesInJson = get($call)
     or die "are you connected to net??";
-  while (($timeSeriesInJson =~ /Error Message/) && $numberOfAttempts <= 5) {
+  while (($timeSeriesInJson =~ /Error Message/) && $numberOfAttempts <= 2) {
     $numberOfAttempts++;
     my $timeSeriesInJson = get($call)
       or die "are you connected to net??";
@@ -112,17 +114,21 @@ for my $ticker (keys %tickers) {
     $decreaseTickers{$percentDecrease} = $ticker;
     #@listDecrease = sort { $a <=> $b} @listDecrease;
   }
+  $tickerCount++;
+  if ($tickerCount%50) {
+    print "$tickerCount Tickers Processed\n";
+  }
 }
 
 print "Printing the increasing ones\n";
 @listDecrease = sort { $b <=> $a} @listDecrease;
 @listIncrease = sort { $b <=> $a} @listIncrease;
-for (my $i = 0; $i < 5; $i++) {
+for (my $i = 0; $i < 30; $i++) {
   print "$increaseTickers{$listIncrease[$i]} - $listIncrease[$i]\n";
 }
 
 print "Printing the decreasing ones\n";
 
-for (my $i = 0; $i < 5; $i++) {
+for (my $i = 0; $i < 30; $i++) {
   print "$decreaseTickers{$listDecrease[$i]} - $listDecrease[$i]\n";
 }
