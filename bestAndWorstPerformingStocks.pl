@@ -31,6 +31,7 @@ foreach my $tickerInfo (@tickerList) {
   $parser->parse($tickerInfo);
   my @listOfTickerInfo = $parser->fields();
   $tickers{$listOfTickerInfo[0]}{"Name"} = $listOfTickerInfo[1];
+  $tickers{$listOfTickerInfo[0]}{"MarketCap"} = $listOfTickerInfo[3];
   $tickers{$listOfTickerInfo[0]}{"IPOyear"} = $listOfTickerInfo[4];
   $tickers{$listOfTickerInfo[0]}{"Sector"} = $listOfTickerInfo[5];
   $tickers{$listOfTickerInfo[0]}{"Industry"} = $listOfTickerInfo[6];
@@ -130,11 +131,16 @@ print "Printing the increasing ones\n";
 @listDecrease = sort { $b <=> $a} @listDecrease;
 @listIncrease = sort { $b <=> $a} @listIncrease;
 for (my $i = 0; $i < 30; $i++) {
-  print "$increaseTickers{$listIncrease[$i]} - $listIncrease[$i]\n";
+  my $ticker = $increaseTickers{$listIncrease[$i]};
+
+  print "$ticker - increased $listIncrease[$i]% and has market" .
+  "cap of $tickers{$ticker}{\"MarketCap\"}\n";
 }
 
 print "Printing the decreasing ones\n";
 
 for (my $i = 0; $i < 30; $i++) {
-  print "$decreaseTickers{$listDecrease[$i]} - $listDecrease[$i]\n";
+  my $ticker = $decreaseTickers{$listDecrease[$i]};
+  print "$ticker - decreased $listDecrease[$i]% and has market" .
+  "cap of $tickers{$ticker}{\"MarketCap\"}\n";
 }
