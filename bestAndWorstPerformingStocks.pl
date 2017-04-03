@@ -92,6 +92,12 @@ for my $ticker (keys %tickers) {
   }
 #  print "Closing prices for $ticker are $closePrices[0], $closePrices[1], $closePrices[2], $closePrices[3]\n";
 
+  if (!(exists $closePrices[0] && exists $closePrices[1] &&
+  exists $closePrices[2] && exists $closePrices[3])) {
+    print "Could not get price for $ticker\n";
+    next;
+  }
+
   if (($closePrices[0]-$closePrices[1] > 0) &&
   ($closePrices[1]-$closePrices[2] > 0) &&
   ($closePrices[2]-$closePrices[3] > 0)  ) {
@@ -115,7 +121,7 @@ for my $ticker (keys %tickers) {
     #@listDecrease = sort { $a <=> $b} @listDecrease;
   }
   $tickerCount++;
-  if ($tickerCount%50) {
+  if ($tickerCount%50 == 0) {
     print "$tickerCount Tickers Processed\n";
   }
 }
